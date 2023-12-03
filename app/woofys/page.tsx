@@ -1,5 +1,5 @@
 import { db } from "~/db";
-import { WoofyCard } from "./_components/WoofyCard";
+import { WoofyCard } from "./_components/woofy-card";
 import Link from "next/link";
 
 type WoofysPageProps = {

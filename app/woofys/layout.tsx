@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { WoofySearch } from "./_components/WoofySearch";
+import { WoofySearch } from "./_components/woofy-search";
 
 type WoofysLayoutProps = {
   children: ReactNode;
