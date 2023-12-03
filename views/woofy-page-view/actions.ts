@@ -15,4 +15,5 @@ export async function updateWoofyMetadata(
     .set({ bio: values.backstory, name: values.name })
     .where(eq(woofysTable.rarity, rarity));
   revalidatePath(`/woofys/${rarity}`);
+  revalidatePath(`/woofys/${rarity}/opengraph-image`);
 }
