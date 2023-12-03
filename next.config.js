@@ -8,6 +8,15 @@ const nextConfig = {
                 protocol: 'https'
             }
         ]
+    },
+    async redirects() {
+        return [
+            {
+                source: '/woofys',
+                destination: '/explore',
+                permanent: false,
+            }
+        ]
     }
 }
 
