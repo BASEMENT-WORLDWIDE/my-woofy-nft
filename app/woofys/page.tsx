@@ -10,6 +10,7 @@ export default async function WoofysPage({ searchParams }: WoofysPageProps) {
   const woofys = await db.query.woofysTable.findMany();
   return (
     <div>
+      <header></header>
       <div className="grid lg:grid-cols-11 gap-4 container mx-auto">
         {woofys.map((woofy) => (
           <Link key={woofy.rarity} href={`/woofys/${woofy.rarity}`}>
