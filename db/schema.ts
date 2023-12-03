@@ -7,6 +7,8 @@ import {
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "./utils";
+import { z } from "zod";
+import { createSelectSchema } from "drizzle-zod";
 
 export const woofysTable = sqliteTable(
   "woofys",
@@ -24,6 +26,10 @@ export const woofysTable = sqliteTable(
     ownerAddressIndex: index("owner_address_index").on(t.ownerAddress),
   })
 );
+
+export type IWoofy = z.infer<typeof selectWoofySchema>;
+
+export const selectWoofySchema = createSelectSchema(woofysTable);
 
 export const woofysRelations = relations(woofysTable, ({ many }) => ({
   traits: many(woofysTraitsTable),
