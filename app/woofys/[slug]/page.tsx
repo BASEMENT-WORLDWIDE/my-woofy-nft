@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "~/db";
+import { env } from "~/env.mjs";
 import { isWalletAddress } from "~/lib/utils";
 import { UserPageView } from "~/views/user-page-view";
 import { WoofyPageView } from "~/views/woofy-page-view";
@@ -44,6 +45,9 @@ export async function generateMetadata(
     description: `${woofy.bio ?? `#${woofy.rarity}`}${
       woofy.ownerAddress ? `owned by ${woofy.ownerAddress}` : ""
     }`,
+    metadataBase: new URL(
+      `${env.NEXT_PUBLIC_METADATA_BASE_URL}/woofys/${params.slug}`
+    ),
   };
 }
 
