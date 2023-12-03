@@ -45,9 +45,6 @@ export async function generateMetadata(
     description: `${woofy.bio ?? `#${woofy.rarity}`}${
       woofy.ownerAddress ? `owned by ${woofy.ownerAddress}` : ""
     }`,
-    metadataBase: new URL(
-      `${env.NEXT_PUBLIC_METADATA_BASE_URL}/woofys/${params.slug}`
-    ),
   };
 }
 
