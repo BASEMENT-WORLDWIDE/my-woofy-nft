@@ -1,0 +1,151 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "id": "f3a68d4f-7b7f-4861-b203-ac01d38b4846",
+  "prevId": "36eade76-7005-4096-b3e9-8b8011554f12",
+  "tables": {
+    "my_woofys_traits": {
+      "name": "my_woofys_traits",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "trait_type_index": {
+          "name": "trait_type_index",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        },
+        "trait_type_trait_name_unique_index": {
+          "name": "trait_type_trait_name_unique_index",
+          "columns": [
+            "type",
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "my_woofys_woofys": {
+      "name": "my_woofys_woofys",
+      "columns": {
+        "rarity": {
+          "name": "rarity",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'https://static.cozyverse.xyz/woofys/images/00000.gif'"
+        },
+        "name": {
+          "name": "name",
+          "type": "text(64)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bio": {
+          "name": "bio",
+          "type": "text(1024)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "owner_address": {
+          "name": "owner_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "owner_address_index": {
+          "name": "owner_address_index",
+          "columns": [
+            "owner_address"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "my_woofys_woofys_traits": {
+      "name": "my_woofys_woofys_traits",
+      "columns": {
+        "woofy_id": {
+          "name": "woofy_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "trait_id": {
+          "name": "trait_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "my_woofys_woofys_traits_trait_id_woofy_id_pk": {
+          "columns": [
+            "trait_id",
+            "woofy_id"
+          ],
+          "name": "my_woofys_woofys_traits_trait_id_woofy_id_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

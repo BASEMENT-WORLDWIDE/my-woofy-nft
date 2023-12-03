@@ -1,0 +1,41 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1701575281370,
+      "tag": "0000_typical_purple_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1701579656571,
+      "tag": "0001_fuzzy_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701580186782,
+      "tag": "0002_uneven_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1701582836444,
+      "tag": "0003_lively_doctor_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1701582859825,
+      "tag": "0004_equal_toad",
+      "breakpoints": true
+    }
+  ]
+}

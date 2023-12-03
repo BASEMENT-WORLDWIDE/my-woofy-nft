@@ -1,0 +1,1 @@
+CREATE INDEX `owner_address_index` ON `my_woofys_woofys` (`owner_address`);
