@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "~/db";
+import { WoofyForm } from "./woofy-page-view/form";
 
 type WoofyPageViewProps = {
   rarity: number;
@@ -35,30 +36,13 @@ export async function WoofyPageView({ rarity }: WoofyPageViewProps) {
             View on Hyperspace
           </Link>
         )}
-        <form className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="name" className="block text-sm">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Enter a name"
-              defaultValue={woofy.name}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="backstory" className="block text-sm">
-              Backstory
-            </label>
-            <textarea
-              id="backstory"
-              name="backstory"
-              placeholder="Enter a backstory"
-            ></textarea>
-          </div>
-        </form>
+        <WoofyForm
+          initialValues={{
+            name: woofy.name,
+            backstory: woofy.bio || undefined,
+          }}
+          rarity={woofy.rarity}
+        />
       </aside>
     </div>
   );

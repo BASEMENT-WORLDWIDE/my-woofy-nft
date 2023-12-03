@@ -46,7 +46,7 @@ export async function generateMetadata(
   return {
     title: `${woofy.name} (#${woofy.rarity})`,
     description: `${woofy.bio ?? `#${woofy.rarity}`}${
-      woofy.ownerAddress ? `owned by ${woofy.ownerAddress}` : ""
+      woofy.ownerAddress ? ` owned by ${woofy.ownerAddress}` : ""
     }`,
   };
 }

@@ -1,5 +1,6 @@
 import { inArray } from "drizzle-orm";
 import Image from "next/image";
+import Link from "next/link";
 import { db } from "~/db";
 import { woofysTable } from "~/db/schema";
 import { EthereumAddress } from "~/lib/utils";
@@ -19,14 +20,14 @@ export async function UserPageView({ publicAddress }: UserPageViewProps) {
       <h1>{publicAddress}</h1>
       <h2>Woofys ({revealed.length})</h2>
       {revealed.map((woofy) => (
-        <div key={woofy.rarity}>
+        <Link href={`/woofys/${woofy.rarity}`} key={woofy.rarity}>
           <Image
             src={woofy.imageUrl}
             alt={woofy.name}
             width={256}
             height={256}
           />
-        </div>
+        </Link>
       ))}
       <h3>Unrevealed ({unrevealed.length})</h3>
       {unrevealed.map((_unrevealed, index) => (

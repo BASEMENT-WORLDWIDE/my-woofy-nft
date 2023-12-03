@@ -256,7 +256,9 @@ export default async function Image({ params }: { params: { slug: string } }) {
               color: "white",
             }}
           >
-            {woofy.name}
+            {`Woofy #${woofy.rarity}` === woofy.name
+              ? woofy.name
+              : `${woofy.name} (#${woofy.rarity})`}
           </h1>
         </div>
       </div>
