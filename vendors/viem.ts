@@ -3,8 +3,5 @@ import { avalanche } from "viem/chains";
 
 export const publicClient = createPublicClient({
   chain: avalanche,
-  transport: http(),
-  batch: {
-    multicall: true,
-  },
+  transport: http(undefined, { batch: true }),
 });

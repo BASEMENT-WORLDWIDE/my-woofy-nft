@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "~/db";
 import { env } from "~/env.mjs";
 import { isWalletAddress } from "~/lib/utils";
+import { Woofy } from "~/models/woofy";
 import { UserPageView } from "~/views/user-page-view";
 import { WoofyPageView } from "~/views/woofy-page-view";
 
@@ -19,8 +20,10 @@ export async function generateMetadata(
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
   if (isWalletAddress(params.slug)) {
+    const woofys = await Woofy.findAllByPublicAddress(params.slug);
     return {
       title: `Wallet ${params.slug}`,
+      description: `${params.slug} has ${woofys.length} Woofys`,
     };
   }
 

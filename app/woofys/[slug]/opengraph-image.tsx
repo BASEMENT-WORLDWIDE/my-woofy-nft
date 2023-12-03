@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { db } from "~/db";
+import { env } from "~/env.mjs";
 import { isWalletAddress } from "~/lib/utils";
+import { Woofy } from "~/models/woofy";
 
 // Route segment config
 export const runtime = "edge";
@@ -23,21 +25,84 @@ export default async function Image({ params }: { params: { slug: string } }) {
   ).then((res) => res.arrayBuffer());
 
   if (isWalletAddress(params.slug)) {
+    const woofys = await Woofy.findAllByPublicAddress(params.slug);
+    const woofysCount = woofys.length;
+    const [woofy] = woofys;
     return new ImageResponse(
       (
         // ImageResponse JSX element
         <div
           style={{
-            fontSize: 128,
-            background: "white",
             width: "100%",
             height: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            position: "relative",
           }}
         >
-          {params.slug}
+          <img
+            src={
+              woofy?.imageUrl ??
+              `${env.NEXT_PUBLIC_METADATA_BASE_URL}/woofy-default.png`
+            }
+            alt={woofy?.name ?? params.slug}
+            style={{
+              objectFit: "cover",
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              filter: "blur(120)",
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              filter: "blur(0)",
+              gap: 12,
+            }}
+          >
+            <img
+              src={
+                woofy?.imageUrl ??
+                `${env.NEXT_PUBLIC_METADATA_BASE_URL}/woofy-default.png`
+              }
+              alt={woofy?.name ?? `${params.slug}`}
+              width={256}
+              height={256}
+              style={{
+                borderRadius: 12,
+                boxShadow: "0 2px 12px rgba(0, 0, 0, 0.4)",
+              }}
+            />
+            <h1
+              style={{
+                fontSize: 72,
+                margin: 0,
+                textShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
+                color: "white",
+              }}
+            >
+              {params.slug.slice(0, 12)}...
+            </h1>
+            <h2
+              style={{
+                fontSize: 48,
+                margin: 0,
+                textShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
+                color: "white",
+              }}
+            >
+              {woofysCount} Woofys
+            </h2>
+          </div>
         </div>
       ),
       // ImageResponse options
@@ -140,18 +205,29 @@ export default async function Image({ params }: { params: { slug: string } }) {
       // ImageResponse JSX element
       <div
         style={{
-          fontSize: 128,
-          backgroundImage: `url(${woofy.imageUrl})`,
-          backgroundSize: "100% 200%",
-          backgroundRepeat: "no-repeat",
-          filter: "blur(50)",
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
         }}
       >
+        <img
+          src={woofy.imageUrl}
+          alt={woofy.name}
+          style={{
+            objectFit: "cover",
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            filter: "blur(120)",
+          }}
+        />
         <div
           style={{
             display: "flex",

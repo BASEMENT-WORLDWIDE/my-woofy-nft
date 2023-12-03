@@ -1,6 +1,9 @@
+import { inArray } from "drizzle-orm";
 import Image from "next/image";
 import { db } from "~/db";
+import { woofysTable } from "~/db/schema";
 import { EthereumAddress } from "~/lib/utils";
+import { Woofy } from "~/models/woofy";
 import { WoofyContract } from "~/models/woofy/contract";
 
 type UserPageViewProps = {
@@ -8,21 +11,14 @@ type UserPageViewProps = {
 };
 
 export async function UserPageView({ publicAddress }: UserPageViewProps) {
-  const tokens = await WoofyContract.getWoofysForOwner(publicAddress);
-  const woofyRarities = await Promise.all(
-    tokens.tokenIds.map((tokenId) => WoofyContract.getRarityForTokenId(tokenId))
-  );
-  const woofys = await db.query.woofysTable.findMany({
-    where(fields, ops) {
-      return ops.inArray(fields.rarity, woofyRarities);
-    },
-  });
-  const unrevealed = woofyRarities.filter((rarity) => rarity === 0);
+  const woofys = await Woofy.findAllByPublicAddress(publicAddress);
+  const unrevealed = woofys.filter((woofy) => woofy.tokenId === 0);
+  const revealed = woofys.filter((woofy) => woofy.tokenId !== 0);
   return (
     <div>
       <h1>{publicAddress}</h1>
-      <h2>Woofys ({woofys.length})</h2>
-      {woofys.map((woofy) => (
+      <h2>Woofys ({revealed.length})</h2>
+      {revealed.map((woofy) => (
         <div key={woofy.rarity}>
           <Image
             src={woofy.imageUrl}

@@ -6,15 +6,15 @@ import { WoofyContract } from "~/models/woofy/contract";
 
 export const runtime = "edge";
 
-async function* fetchTokenRarity(rarities: number[]) {
-  for (const rarity of rarities) {
-    try {
-      const response = await WoofyContract.getTokenIdForRarity(rarity);
-      yield response;
-    } catch (err) {
-      console.error(err);
-    }
+function batchItems<T>(items: T[], batchSize: number): T[][] {
+  const result: T[][] = [];
+
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    result.push(batch);
   }
+
+  return result;
 }
 
 export const GET = async (req: NextRequest) => {
@@ -26,28 +26,33 @@ export const GET = async (req: NextRequest) => {
       rarity: true,
     },
   });
-  const revealedWoofyTokenIds: { rarity: number | string; tokenId: number }[] =
-    [];
-  for await (const woofy of fetchTokenRarity(
-    unrevealedWoofys.map((woofy) => woofy.rarity)
-  )) {
-    if (woofy.tokenId === 0) {
-      continue;
-    }
-    revealedWoofyTokenIds.push(woofy);
-  }
-  revealedWoofyTokenIds.forEach(async (woofy) => {
-    const rarity = (() => {
-      if (typeof woofy.rarity === "string") {
-        return parseInt(woofy.rarity);
+  const batchedUnrevealedWoofys = batchItems(unrevealedWoofys, 40);
+  const encoder = new TextEncoder();
+  const readableStream = new ReadableStream({
+    async start(controller) {
+      for (const batch of batchedUnrevealedWoofys) {
+        const revealedWoofyTokenIds = await Promise.all(
+          batch.map((woofy) => WoofyContract.getTokenIdForRarity(woofy.rarity))
+        );
+        revealedWoofyTokenIds.forEach(async (woofy) => {
+          const rarity = (() => {
+            if (typeof woofy.rarity === "string") {
+              return parseInt(woofy.rarity);
+            }
+            return woofy.rarity;
+          })();
+          await db
+            .update(woofysTable)
+            .set({ tokenId: woofy.tokenId })
+            .where(eq(woofysTable.rarity, rarity));
+          controller.enqueue(encoder.encode(`<p>${woofy.rarity}</p>`));
+        });
       }
-      return woofy.rarity;
-    })();
-    await db
-      .update(woofysTable)
-      .set({ tokenId: woofy.tokenId })
-      .where(eq(woofysTable.rarity, rarity));
+      controller.close();
+    },
   });
 
-  return new Response("OK");
+  return new Response(readableStream, {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
 };
