@@ -12,7 +12,7 @@ export async function Navigation() {
         <GlobalSearch />
         <div className="flex items-center ml-auto">
           <Link
-            href="/woofys"
+            href="/explorer"
             className="font-semibold hover:underline underline-offset-4"
           >
             Explorer
